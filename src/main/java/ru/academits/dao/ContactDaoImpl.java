@@ -20,10 +20,7 @@ public class ContactDaoImpl extends GenericDaoImpl<Contact, Long> implements Con
 
     @Override
     public List<Contact> getAllContacts() {
-        return findAll()
-                .stream()
-                .filter(contact -> !contact.isDeleted())
-                .collect(Collectors.toList());
+        return findAll();
     }
 
     @Override
@@ -42,7 +39,7 @@ public class ContactDaoImpl extends GenericDaoImpl<Contact, Long> implements Con
     }
 
     @Override
-    public void deleteContact (Contact contactToDelete){
+    public void deleteContact(Contact contactToDelete) {
         contactToDelete.setDeleted(true);
         update(contactToDelete);
     }

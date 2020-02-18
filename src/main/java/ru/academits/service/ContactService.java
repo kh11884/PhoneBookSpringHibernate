@@ -5,7 +5,9 @@ import ru.academits.dao.ContactDao;
 import ru.academits.model.Contact;
 import ru.academits.model.ContactValidation;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ContactService {
@@ -17,6 +19,9 @@ public class ContactService {
 
     private boolean isExistContactWithPhone(String phone) {
         List<Contact> contactList = contactDao.findByPhone(phone);
+        contactList = contactList.stream()
+                .filter(contact -> !contact.isDeleted())
+                .collect(Collectors.toList());
         return !contactList.isEmpty();
     }
 

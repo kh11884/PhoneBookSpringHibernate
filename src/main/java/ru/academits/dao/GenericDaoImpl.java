@@ -53,6 +53,8 @@ public class GenericDaoImpl<T, PK extends Serializable> implements GenericDao<T,
 
         Root<T> root = cq.from(clazz);
 
+        cq.where(cb.equal(root.get("isDeleted"), 0));
+
         CriteriaQuery<T> select = cq.select(root);
         TypedQuery<T> q = entityManager.createQuery(select);
 

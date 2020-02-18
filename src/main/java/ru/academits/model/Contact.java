@@ -60,4 +60,15 @@ public class Contact {
     public void setDeleted(boolean deleted) {
         isDeleted = deleted;
     }
+
+    @Override
+    public String toString() {
+        return "Contact{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", phone='" + phone + '\'' +
+                ", isDeleted=" + isDeleted +
+                '}';
+    }
 }
