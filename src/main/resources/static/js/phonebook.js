@@ -6,6 +6,10 @@ function Contact(firstName, lastName, phone) {
     this.shown = true;
 }
 
+function IDsToDelete(iDs) {
+    this.iDs = iDs;
+}
+
 new Vue({
     el: "#app",
     data: {
@@ -15,7 +19,8 @@ new Vue({
         lastName: "",
         phone: "",
         rows: [],
-        serverError: ""
+        serverError: "",
+        checkAll: false
     },
     methods: {
         contactToString: function (contact) {
@@ -47,6 +52,32 @@ new Vue({
                 url: "/phoneBook/rpc/api/v1/delContact",
                 contentType: "application/json",
                 data: JSON.stringify(contact)
+            }).done(function () {
+                self.serverValidation = false;
+            }).fail(function (ajaxRequest) {
+                var contactValidation = JSON.parse(ajaxRequest.responseText);
+                self.serverError = contactValidation.error;
+                self.serverValidation = true;
+            }).always(function () {
+                self.loadData();
+            });
+        },
+        deleteCheckedContacts: function () {
+            this.checkAll = false;
+
+            var iDs = this.rows.filter(function (contact) {
+                return contact.checked;
+            }).map(function (contact) {
+                return contact.id;
+            });
+
+            var self = this;
+
+            $.ajax({
+                type: "POST",
+                url: "/phoneBook/rpc/api/v1/deleteContacts",
+                contentType: "application/json",
+                data: JSON.stringify(new IDsToDelete(iDs))
             }).done(function () {
                 self.serverValidation = false;
             }).fail(function (ajaxRequest) {
@@ -93,6 +124,21 @@ new Vue({
             $.get("/phoneBook/rpc/api/v1/getAllContacts").done(function (contactListFormServer) {
                 self.rows = self.convertContactList(contactListFormServer);
             });
+        },
+        checkedAllContacts: function () {
+            var self = this;
+            this.rows.forEach(function (contact) {
+                contact.checked = self.checkAll;
+            });
+        },
+        isAllChecked: function () {
+            if (this.rows.length === 0) {
+                this.checkAll = false;
+            } else {
+                this.checkAll = this.rows.every(function (contact) {
+                    return contact.checked === true;
+                });
+            }
         }
     },
     computed: {

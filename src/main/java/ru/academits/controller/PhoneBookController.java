@@ -6,6 +6,7 @@ import ru.academits.converter.ContactDtoToContactConverter;
 import ru.academits.converter.ContactToContactDtoConverter;
 import ru.academits.dto.ContactDto;
 import ru.academits.model.ContactValidation;
+import ru.academits.model.IDsToDelete;
 import ru.academits.service.ContactService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,6 +47,13 @@ public class PhoneBookController {
     public void delContact(@RequestBody ContactDto contact) {
         logger.info("called method delContact");
         contactService.delete(contactDtoToContactConverter.convert(contact));
+    }
+
+    @RequestMapping(value = "deleteContacts", method = RequestMethod.POST)
+    @ResponseBody
+    public void deleteContacts(@RequestBody IDsToDelete iDs) {
+        logger.info("called method deleteContacts");
+        contactService.deleteContacts(iDs.getiDs());
     }
 }
 

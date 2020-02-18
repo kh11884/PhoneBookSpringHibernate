@@ -60,11 +60,21 @@ public class ContactService {
     }
 
     public List<Contact> getAllContacts() {
-        System.out.println(contactDao.getById((long) 1));
         return contactDao.getAllContacts();
     }
 
     public void delete(Contact contact) {
-       contactDao.deleteContact(contact);
+        contactDao.deleteContact(contact);
+    }
+
+    public void deleteContacts(int[] iDs) {
+        System.out.println(Arrays.toString(iDs));
+
+        for (int iD : iDs
+        ) {
+            Contact contact = contactDao.getById((long) iD);
+            System.out.println(contact);
+            contactDao.deleteContact(contact);
+        }
     }
 }
