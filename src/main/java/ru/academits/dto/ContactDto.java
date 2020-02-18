@@ -9,8 +9,6 @@ public class ContactDto {
 
     private String phone;
 
-    private boolean isDeleted;
-
     public Long getId() {
         return id;
     }
@@ -41,13 +39,5 @@ public class ContactDto {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public boolean isDeleted() {
-        return isDeleted;
-    }
-
-    public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
     }
 }

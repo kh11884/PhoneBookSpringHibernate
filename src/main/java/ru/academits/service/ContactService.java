@@ -19,9 +19,6 @@ public class ContactService {
 
     private boolean isExistContactWithPhone(String phone) {
         List<Contact> contactList = contactDao.findByPhone(phone);
-        contactList = contactList.stream()
-                .filter(contact -> !contact.isDeleted())
-                .collect(Collectors.toList());
         return !contactList.isEmpty();
     }
 
@@ -63,6 +60,7 @@ public class ContactService {
     }
 
     public List<Contact> getAllContacts() {
+        System.out.println(contactDao.getById((long) 1));
         return contactDao.getAllContacts();
     }
 
