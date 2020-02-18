@@ -5,9 +5,7 @@ import ru.academits.dao.ContactDao;
 import ru.academits.model.Contact;
 import ru.academits.model.ContactValidation;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ContactService {
@@ -68,12 +66,8 @@ public class ContactService {
     }
 
     public void deleteContacts(int[] iDs) {
-        System.out.println(Arrays.toString(iDs));
-
-        for (int iD : iDs
-        ) {
+        for (int iD : iDs) {
             Contact contact = contactDao.getById((long) iD);
-            System.out.println(contact);
             contactDao.deleteContact(contact);
         }
     }
