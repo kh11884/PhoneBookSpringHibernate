@@ -6,6 +6,7 @@ import ru.academits.model.Contact;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.HashMap;
 import java.util.List;
@@ -30,10 +31,12 @@ public class ContactDaoImpl extends GenericDaoImpl<Contact, Long> implements Con
 
         Root<Contact> root = cq.from(clazz);
 
-        cq.where(
-                cb.equal(root.get("phone"), phone),
-                cb.equal(root.get("isDeleted"), false)
-        );
+        Predicate unDeletedPredicate = cb.equal(root.get("isDeleted"), false);
+        Predicate samePhonePredicate = cb.equal(root.get("phone"), phone);
+
+        Predicate finalPredicate = cb.and(unDeletedPredicate, samePhonePredicate);
+
+        cq.where(finalPredicate);
 
         CriteriaQuery<Contact> select = cq.select(root);
         TypedQuery<Contact> q = entityManager.createQuery(select);

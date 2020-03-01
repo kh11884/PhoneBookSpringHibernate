@@ -7,6 +7,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.io.Serializable;
 import java.util.List;
@@ -53,7 +54,16 @@ public class GenericDaoImpl<T, PK extends Serializable> implements GenericDao<T,
 
         Root<T> root = cq.from(clazz);
 
-        cq.where(cb.equal(root.get("isDeleted"), false));
+        Predicate unDeletedPredicate = cb.equal(root.get("isDeleted"), false);
+
+        Predicate firstNameFilterPredicate = cb.like(root.get("firstName"), "%w%");
+        Predicate lastNameFilterPredicate = cb.like(root.get("lastName"), "%w%");
+        Predicate nameFilterPredicate = cb.or(firstNameFilterPredicate, lastNameFilterPredicate);
+
+        cq.where(cb.and(
+                unDeletedPredicate,
+                nameFilterPredicate
+        ));
 
         CriteriaQuery<T> select = cq.select(root);
         TypedQuery<T> q = entityManager.createQuery(select);
