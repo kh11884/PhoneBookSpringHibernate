@@ -20,7 +20,8 @@ new Vue({
         phone: "",
         rows: [],
         serverError: "",
-        checkAll: false
+        checkAll: false,
+        term: ""
     },
     methods: {
         contactToString: function (contact) {
@@ -121,9 +122,19 @@ new Vue({
         loadData: function () {
             var self = this;
 
-            $.get("/phoneBook/rpc/api/v1/getAllContacts").done(function (contactListFormServer) {
+            $.ajax({
+                type: "GET",
+                url: "/phoneBook/rpc/api/v1/getAllContacts",
+                data: {
+                    term: self.term
+                }
+            }).done(function (contactListFormServer) {
                 self.rows = self.convertContactList(contactListFormServer);
             });
+        },
+        resetFilter: function (){
+          this.term = "";
+          this.loadData();
         },
         checkedAllContacts: function () {
             var self = this;

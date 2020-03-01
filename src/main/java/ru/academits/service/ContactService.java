@@ -57,8 +57,8 @@ public class ContactService {
         return contactValidation;
     }
 
-    public List<Contact> getAllContacts() {
-        return contactDao.getAllContacts();
+    public List<Contact> getAllContacts(String term) {
+        return contactDao.getAllContacts(term);
     }
 
     public void delete(Contact contact) {

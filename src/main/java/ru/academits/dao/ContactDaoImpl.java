@@ -20,8 +20,8 @@ public class ContactDaoImpl extends GenericDaoImpl<Contact, Long> implements Con
     }
 
     @Override
-    public List<Contact> getAllContacts() {
-        return findAll();
+    public List<Contact> getAllContacts(String term) {
+        return findAll(term);
     }
 
     @Override

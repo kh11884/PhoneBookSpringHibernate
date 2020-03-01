@@ -30,9 +30,9 @@ public class PhoneBookController {
 
     @RequestMapping(value = "getAllContacts", method = RequestMethod.GET)
     @ResponseBody
-    public List<ContactDto> getAllContacts() {
+    public List<ContactDto> getAllContacts(@RequestParam String term) {
         logger.info("called method getAllContacts");
-        return contactToContactDtoConverter.convert(contactService.getAllContacts());
+        return contactToContactDtoConverter.convert(contactService.getAllContacts(term));
     }
 
     @RequestMapping(value = "addContact", method = RequestMethod.POST)

@@ -20,5 +20,5 @@ public interface GenericDao<T, PK extends Serializable> {
     T getById(PK id);
 
     @Transactional
-    List<T> findAll();
+    List<T> findAll(String term);
 }

@@ -48,7 +48,7 @@ public class GenericDaoImpl<T, PK extends Serializable> implements GenericDao<T,
 
     @Transactional
     @Override
-    public List<T> findAll() {
+    public List<T> findAll(String term) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<T> cq = cb.createQuery(clazz);
 
@@ -56,13 +56,15 @@ public class GenericDaoImpl<T, PK extends Serializable> implements GenericDao<T,
 
         Predicate unDeletedPredicate = cb.equal(root.get("isDeleted"), false);
 
-        Predicate firstNameFilterPredicate = cb.like(root.get("firstName"), "%w%");
-        Predicate lastNameFilterPredicate = cb.like(root.get("lastName"), "%w%");
-        Predicate nameFilterPredicate = cb.or(firstNameFilterPredicate, lastNameFilterPredicate);
+        Predicate firstNameFilterPredicate = cb.like(root.get("firstName"), "%" + term + "%");
+        Predicate lastNameFilterPredicate = cb.like(root.get("lastName"), "%" + term + "%");
+        Predicate phoneFilterPredicate = cb.like(root.get("phone"), "%" + term + "%");
+
+        Predicate columnFilterPredicate = cb.or(firstNameFilterPredicate, lastNameFilterPredicate, phoneFilterPredicate);
 
         cq.where(cb.and(
                 unDeletedPredicate,
-                nameFilterPredicate
+                columnFilterPredicate
         ));
 
         CriteriaQuery<T> select = cq.select(root);
