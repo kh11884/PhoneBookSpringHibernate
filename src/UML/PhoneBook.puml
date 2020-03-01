@@ -1,0 +1,36 @@
+@startuml
+actor User
+participant Browser
+participant Server
+database DataBase
+== show all contacts ==
+User -> Browser: open PhoneBook
+Browser -> Server: http request (get) getAllContacts
+Server -> DataBase: SQL Request: SELECT with filter not deleted contacts
+Server <- DataBase: return contacts
+Browser <- Server: response contacts
+User <- Browser: show contacts
+== add contact ==
+User -> Browser: fill form fields and press "add contacts"
+Browser -> Server: http request (post) addContact with data "Contact"
+Server -> DataBase: SQL Request: add new contact
+Server -> DataBase: SQL Request: SELECT with filter not deleted contacts
+Server <- DataBase: return contacts
+Browser <- Server: response contacts
+User <- Browser: show contacts
+== delete contact ==
+User -> Browser: press button "delete"
+Browser -> Server: http request (post) deleteContact with data "Contact"
+Server -> DataBase: SQL Request: update contact - mark "deleted"
+Server -> DataBase: SQL Request: SELECT with filter not deleted contacts
+Server <- DataBase: return contacts
+Browser <- Server: response contacts
+User <- Browser: show contacts
+== filter ==
+User -> Browser: fill form field and press button "filter"
+Browser -> Server: http request (get) getAllContacts with parameter keyString
+Server -> DataBase: SQL Request: SELECT with filter not deleted contacts and keyString (firstName OR lastName OR phone)
+Server <- DataBase: return contacts
+Browser <- Server: response contacts
+User <- Browser: show contacts
+@enduml
